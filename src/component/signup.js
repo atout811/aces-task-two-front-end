@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 export default class SignUp extends Component {
   state = {
@@ -35,7 +35,7 @@ export default class SignUp extends Component {
     await axios
       .post("http://localhost:8000/api/auth/register", userObject)
       .then(res => {
-        console.log(res.data);
+        localStorage.setItem("x-auth-token", res.headers['x-auth-token']);
       })
       .catch(error => {
         console.log(error.response);
@@ -43,6 +43,9 @@ export default class SignUp extends Component {
   };
 
   render() {
+    if (localStorage.getItem("x-auth-token")) {
+      return <Redirect to={{ pathname: "/" }} />;
+    }
     return (
       <div>
         <div style={{ marginTop: 50 }}>

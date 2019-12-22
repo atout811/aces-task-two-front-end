@@ -26,11 +26,10 @@ export default class login extends Component {
       email: this.state.email,
       password: this.state.password
     };
-
     await axios
       .post("http://localhost:8000/api/auth/login", userObject)
       .then(res => {
-        console.log(res.data);
+        localStorage.setItem('x-auth-token', res.headers['x-auth-token']);
         this.setState({ isSignedUp: true });
       })
       .catch(error => {
@@ -39,7 +38,7 @@ export default class login extends Component {
   };
 
   render() {
-    if (this.state.isSignedUp) {
+    if (localStorage.getItem("x-auth-token")) {
       return <Redirect to={{ pathname: "/" }} />;
     }
     return (
