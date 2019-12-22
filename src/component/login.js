@@ -28,7 +28,7 @@ export default class login extends Component {
     };
 
     await axios
-      .post("http://localhost:8000/api//auth/login", userObject)
+      .post("http://localhost:8000/api/auth/login", userObject)
       .then(res => {
         console.log(res.data);
         this.setState({ isSignedUp: true });
