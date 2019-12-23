@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Link, Redirect } from "react-router-dom";
+import jwt from 'jsonwebtoken';
+import { connect } from "react-redux";
 
-export default class SignUp extends Component {
+class SignUp extends Component {
   state = {
     name: "",
     email: "",
     password: "",
-    succes: false
+    err: ""
   };
   handleInputChangeName = e => {
     this.setState({
@@ -36,17 +38,22 @@ export default class SignUp extends Component {
     await axios
       .post("http://localhost:8000/api/auth/register", userObject)
       .then(res => {
-        console.log(res.data);
-        this.setState({ succes: true });
+        localStorage.setItem("x-auth-token", res.headers["x-auth-token"]);
+        const decoded = jwt.decode(localStorage.getItem("x-auth-token"));
+        this.props.isLogged(decoded);
       })
       .catch(error => {
-        console.log(error.response);
+        this.setState({ err: error.response.data });
       });
   };
 
   render() {
-    if (this.state.succes) {
-      return <Redirect to={{ pathname: "/" }} />;
+    if (localStorage.getItem("x-auth-token")) {
+      return (
+        <div>
+          <Redirect to={{ pathname: "/" }} />
+        </div>
+      );
     }
     return (
       <div>
@@ -102,7 +109,7 @@ export default class SignUp extends Component {
                   </div>
                 </div>
 
-                <div className="ui error message"></div>
+                <div className="ui error message" style={ this.state.err ? {display: 'block'} : {} }>{ this.state.err }</div>
               </form>
 
               <div className="ui message">
@@ -115,3 +122,28 @@ export default class SignUp extends Component {
     );
   }
 }
+
+
+const mapStateToProps = state => {
+  return {
+    islogged: state.isLogged,
+    topLeft: state.topleft,
+    topRight: state.topright,
+    toLeft: state.toleft,
+    toRight: state.toright,
+    name: state.name,
+    email: state.email,
+    role: state.role
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    isLogged: (name, email, role) => {
+      dispatch({ type: "IS_LOGGED", payload: name, email, role });
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
+

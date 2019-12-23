@@ -7,9 +7,7 @@ class Home extends Component {
   componentDidMount() {
     if (localStorage.getItem("x-auth-token")) {
       const decoded = jwt.decode(localStorage.getItem("x-auth-token"));
-      console.log(decoded.name);
-    } else {
-      this.setState({ name: "", email: "", role: "" });
+      this.props.whileLogged(decoded);
     }
   }
 
@@ -17,7 +15,7 @@ class Home extends Component {
     // return (
     let out = (
       <div>
-        <h1>Welcome To Our Task ,{this.props.name} ^_^</h1>
+        <h1>Welcome To Our Task  ^_^</h1>
         <h3>
           if you're new here please <Link to="/signup">Sign up</Link>
         </h3>
@@ -30,8 +28,7 @@ class Home extends Component {
     if (this.props.name) {
       out = (
         <div>
-          <h1>Welcome To Our Task ^_^</h1>
-          <h3>Welcome, {this.props.name}</h3>
+          <h1>Welcome To Our Task, {this.props.name} ^_^</h1>
         </div>
       );
     }
@@ -54,4 +51,4 @@ const mapDispatchToProps = dispatch => {
     }
   };
 };
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

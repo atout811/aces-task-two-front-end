@@ -7,7 +7,8 @@ import jwt from "jsonwebtoken";
 class Login extends Component {
   state = {
     email: "",
-    password: ""
+    password: "",
+    err: ""
   };
 
   handleInputChangeEmail = e => {
@@ -36,7 +37,7 @@ class Login extends Component {
         this.props.isLogged(decoded);
       })
       .catch(error => {
-        console.log(error.response.data);
+        this.setState({ err: error.response.data });
       });
   };
 
@@ -89,7 +90,7 @@ class Login extends Component {
                 </div>
               </div>
 
-              <div className="ui error message"></div>
+              <div className="ui error message" style={ this.state.err ? {display: 'block'} : {} }>{ this.state.err }</div>
             </form>
 
             <div className="ui message">
