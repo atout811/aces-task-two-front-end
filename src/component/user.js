@@ -7,13 +7,17 @@ export default class User extends Component {
     name: "",
     email: "",
     role: ""
-  }
-  componentWillMount(){
-    if(localStorage.getItem('x-auth-token')){
+  };
+  componentWillMount() {
+    if (localStorage.getItem("x-auth-token")) {
       let decoded = jwt.decode(localStorage.getItem("x-auth-token"));
-      this.setState({name: decoded.name, email: decoded.email, role: decoded.role});
-    }else{
-      this.setState({name: "", email: "", role: ""});
+      this.setState({
+        name: decoded.name,
+        email: decoded.email,
+        role: decoded.role
+      });
+    } else {
+      this.setState({ name: "", email: "", role: "" });
     }
   }
   render() {
@@ -24,15 +28,20 @@ export default class User extends Component {
       <div>
         <div className="ui two column grid">
           <div className="column">
-            <h2>{ this.state.name }</h2>
+            <h2>User Name: {this.state.name}</h2>
           </div>
           <div className="column">
             <div className="ui raised segment">
-              <a className="ui red ribbon label" href="/">Overview</a>
+              <a className="ui red ribbon label" href="/">
+                Overview
+              </a>
               <span>Account Details</span>
-              <p>{ this.state.email }</p>
-              <a className="ui blue ribbon label" href="/">Community</a> User Reviews
-              <p>{ this.state.role }</p>
+              <p> Email: {this.state.email}</p>
+              <a className="ui blue ribbon label" href="/">
+                Community
+              </a>{" "}
+              User Reviews
+              <p>Role: {this.state.role}</p>
             </div>
           </div>
         </div>

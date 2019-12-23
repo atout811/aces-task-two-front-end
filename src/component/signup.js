@@ -6,7 +6,8 @@ export default class SignUp extends Component {
   state = {
     name: "",
     email: "",
-    password: ""
+    password: "",
+    succes: false
   };
   handleInputChangeName = e => {
     this.setState({
@@ -35,7 +36,8 @@ export default class SignUp extends Component {
     await axios
       .post("http://localhost:8000/api/auth/register", userObject)
       .then(res => {
-        localStorage.setItem("x-auth-token", res.headers['x-auth-token']);
+        console.log(res.data);
+        this.setState({ succes: true });
       })
       .catch(error => {
         console.log(error.response);
@@ -43,7 +45,7 @@ export default class SignUp extends Component {
   };
 
   render() {
-    if (localStorage.getItem("x-auth-token")) {
+    if (this.state.succes) {
       return <Redirect to={{ pathname: "/" }} />;
     }
     return (
